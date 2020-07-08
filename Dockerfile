@@ -1,14 +1,12 @@
 FROM centos:7.6.1810
 
 # Install essentials
-RUN yum install -y epel-release
-RUN yum install -y openssh-clients
-RUN yum install -y git
-RUN yum install -y bsdtar
-RUN yum install -y wget
-
-# Clean up after ourselves
-RUN yum clean all
+RUN yum install -y epel-release \
+                   openssh-clients \
+                   git \
+                   bsdtar \
+                   wget && \
+                   yum clean all
 
 # Install Ansible and required pip libraries
 COPY resources/get-pip.py /get-pip.py

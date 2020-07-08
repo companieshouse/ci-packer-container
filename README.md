@@ -21,6 +21,6 @@ ansible_version         | Ansible version installed on the container            
 The images are built and tagged with Concourse and have the following prefix:
 
 ```
-packer/1.4.2/ansible/2.8.1/container/<CONTAINER_VERSION>
+packer-1.4.2-ansible-2.8.1-container-<CONTAINER_VERSION>
 ```
-The `CONTAINER_VERSION` follows the semantic versioning approach. 
+The `CONTAINER_VERSION` follows the semantic versioning approach.
