@@ -20,7 +20,7 @@ RUN pip3 install ansible==${ANSIBLE_VERSION} \
 RUN rpm --import http://yum-repository.platform.aws.chdev.org/RPM-GPG-KEY-platform-noarch && \
     yum install -y yum-utils && \
     yum-config-manager --add-repo http://yum-repository.platform.aws.chdev.org/platform-noarch.repo && \
-    yum install -y platform-tools && \
+    yum install -y platform-tools-common && \
     yum clean all
 
 # Install Packer
