@@ -1,7 +1,7 @@
 FROM centos:8
 
-ARG ANSIBLE_VERSION=2.9.10
-ARG PACKER_VERSION=1.6.0
+ARG ANSIBLE_VERSION=2.10.4
+ARG PACKER_VERSION=1.6.6
 
 RUN yum install -y epel-release \
                 openssh-clients \
