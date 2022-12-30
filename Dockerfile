@@ -1,21 +1,25 @@
-FROM centos:8
+FROM amazonlinux:2
 
-ARG ANSIBLE_VERSION=2.10.4
 ARG PACKER_VERSION=1.6.6
 
-RUN yum install -y epel-release \
-                openssh-clients \
-                git \
-                wget \
-                bsdtar \
-                python3-pip && \
-                alternatives --set python /usr/bin/python3
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-RUN pip3 install ansible==${ANSIBLE_VERSION} \
-                 boto \
-                 boto3 \
-                 dnspython \
-                 netaddr
+RUN amazon-linux-extras enable python3.8 && \
+    yum clean metadata && \
+    yum install -y \
+    openssh-clients \
+    git \
+    wget \
+    bsdtar \
+    python38 && \
+    yum clean all
+
+# Remove conflicting cracklib-packer symlink
+RUN unlink /usr/sbin/packer
+
+COPY resources/requirements.txt /requirements.txt
+RUN python3.8 -m pip install --no-cache-dir -r /requirements.txt && \
+    rm /requirements.txt
 
 RUN rpm --import http://yum-repository.platform.aws.chdev.org/RPM-GPG-KEY-platform-noarch && \
     yum install -y yum-utils && \

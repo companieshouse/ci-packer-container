@@ -1,0 +1,7 @@
+ansible==2.10.4
+boto==2.49.0
+boto3==1.24.86
+botocore==1.27.86
+dnspython==2.1.0
+netaddr==0.8.0
+pywinrm==0.4.3
