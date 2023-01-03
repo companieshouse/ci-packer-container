@@ -6,6 +6,7 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 RUN amazon-linux-extras enable python3.8 && \
     yum clean metadata && \
+    yum update -y && \
     yum install -y \
     openssh-clients \
     git \
