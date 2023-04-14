@@ -1,6 +1,6 @@
 FROM amazonlinux:2
 
-ARG PACKER_VERSION=1.6.6
+ARG PACKER_VERSION=1.8.6
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
