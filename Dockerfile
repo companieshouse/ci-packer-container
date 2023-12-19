@@ -3,6 +3,9 @@ FROM centos:8
 ARG ANSIBLE_VERSION=2.9.10
 ARG PACKER_VERSION=1.6.0
 
+RUN sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-* && \
+    sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*
+
 RUN yum install -y epel-release \
                 openssh-clients \
                 git \
