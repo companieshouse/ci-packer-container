@@ -1,4 +1,4 @@
-FROM 416670754337.dkr.ecr.eu-west-2.amazonaws.com/ci-core-runtime:latest
+FROM amazonlinux:2023
 
 ARG PACKER_VERSION=1.10.0
 
