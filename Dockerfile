@@ -1,26 +1,22 @@
-FROM amazonlinux:2
+FROM 416670754337.dkr.ecr.eu-west-2.amazonaws.com/ci-core-runtime:latest
 
-ARG PACKER_VERSION=1.8.7
+ARG PACKER_VERSION=1.10.0
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-RUN amazon-linux-extras enable python3.8 && \
-    yum clean metadata && \
-    yum update -y && \
-    yum install -y \
+RUN    dnf clean metadata && \
+    dnf update -y && \
+    dnf install -y \
     openssh-clients \
     git \
+    pip \
     wget \
-    bsdtar \
-    python38 && \
-    yum clean all
-
-# Remove conflicting cracklib-packer symlink
-RUN unlink /usr/sbin/packer
+    bsdtar && \
+    dnf clean all
 
 COPY resources/requirements.txt /requirements.txt
-RUN python3.8 -m pip install --no-cache-dir -r /requirements.txt && \
-    rm /requirements.txt
+ RUN python3 -m pip install --no-cache-dir -r /requirements.txt && \
+     rm /requirements.txt
 
 RUN rpm --import http://yum-repository.platform.aws.chdev.org/RPM-GPG-KEY-platform-noarch && \
     yum install -y yum-utils && \
