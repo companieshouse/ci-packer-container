@@ -8,11 +8,13 @@ RUN amazon-linux-extras enable python3.8 && \
     yum clean metadata && \
     yum update -y && \
     yum install -y \
-    openssh-clients \
-    git \
-    wget \
     bsdtar \
-    python38 && \
+    git \
+    openssh-clients \
+    python38 \
+    tar \
+    unzip \
+    wget && \
     yum clean all
 
 # Remove conflicting cracklib-packer symlink
