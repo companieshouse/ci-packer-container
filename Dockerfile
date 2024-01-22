@@ -4,14 +4,16 @@ ARG PACKER_VERSION=1.10.0
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-RUN    dnf clean metadata && \
+RUN dnf clean metadata && \
     dnf update -y && \
     dnf install -y \
-    openssh-clients \
+    bsdtar \
     git \
+    openssh-clients \
     pip \
-    wget \
-    bsdtar && \
+    tar \
+    unzip \
+    wget && \
     dnf clean all
 
 COPY resources/requirements.txt /requirements.txt
