@@ -1,0 +1,24 @@
+name : ci-lint
+
+on:
+  push:
+    branches:
+    - packer-1.10.0-ansible-8.7.0
+  pull_request:
+    branches:
+    - packer-1.10.0-ansible-8.7.0
+
+jobs:
+  
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Check out the codebase
+        uses: actions/checkout@v4
+
+      - name: Run hadolint
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: Dockerfile
