@@ -1,40 +1,30 @@
-FROM amazonlinux:2023
+FROM 416670754337.dkr.ecr.eu-west-2.amazonaws.com/ci-core-runtime:1.1.0
 
-ARG PACKER_VERSION=1.10.0
-
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-
-RUN dnf clean metadata && \
-    dnf update -y && \
+# Install essentials
+RUN dnf update -y && \
     dnf install -y \
-    bsdtar \
     git \
     openssh-clients \
-    pip \
-    tar \
+    python3.12 \
+    python3.12-pip \
     unzip \
     wget && \
     dnf clean all
 
+# Install Ansible and required pip3.12 libraries
 COPY resources/requirements.txt /requirements.txt
- RUN python3 -m pip install --no-cache-dir -r /requirements.txt && \
-     rm /requirements.txt
-
-RUN rpm --import http://yum-repository.platform.aws.chdev.org/RPM-GPG-KEY-platform-noarch && \
-    yum install -y yum-utils && \
-    yum-config-manager --add-repo http://yum-repository.platform.aws.chdev.org/platform-noarch.repo && \
-    yum install -y platform-tools-common && \
-    yum clean all
+RUN python3.12 -m pip install --no-cache-dir -r /requirements.txt && \
+    rm /requirements.txt
 
 # Install Packer
-RUN wget -qO- https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_linux_amd64.zip | bsdtar -xvf- -C /usr/bin/ && \
+RUN curl -sL "https://releases.hashicorp.com/packer/1.15.0/packer_1.15.0_linux_amd64.zip" -o "packer_1.15.0_linux_amd64.zip" && \
+    curl -sL "https://releases.hashicorp.com/packer/1.15.0/packer_1.15.0_SHA256SUMS" -o sha256sum.txt && \
+    grep "packer_1.15.0_linux_amd64.zip" sha256sum.txt | sha256sum --check --status && \
+    unzip packer_1.15.0_linux_amd64.zip -x LICENSE.txt -d /usr/bin/ && \
     chown root:root /usr/bin/packer && \
-    chmod 755 /usr/bin/packer
+    chmod 755 /usr/bin/packer && \
+    rm sha256sum.txt
 
 # Create packer user
 RUN useradd -ms /bin/bash packer
 USER packer
-
-WORKDIR /playbook
-
-ENTRYPOINT ["/bin/bash"]
