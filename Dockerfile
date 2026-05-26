@@ -1,14 +1,16 @@
 FROM 416670754337.dkr.ecr.eu-west-2.amazonaws.com/ci-core-runtime:1.1.0
 
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
 # Install essentials
 RUN dnf update -y && \
     dnf install -y \
-    git \
-    openssh-clients \
+    git-2.50.1 \
+    openssh-clients-8.7p1 \
     python3.12 \
     python3.12-pip \
-    unzip \
-    wget && \
+    unzip-6.0 \
+    wget-1.21.3 && \
     dnf clean all
 
 # Install Ansible and required pip3.12 libraries
