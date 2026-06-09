@@ -1,4 +1,4 @@
-ansible==13.7.0
+ansible>=13.0,<14.0
 boto3==1.43.12
 dnspython==2.8.0
 hvac==2.4.0
