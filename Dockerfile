@@ -1,12 +1,14 @@
 FROM 416670754337.dkr.ecr.eu-west-2.amazonaws.com/ci-core-runtime:1.1.0
 
 ARG PACKER_VERSION=1.15.0
+ARG PLATFORM_TOOLS_VERSION=1.0.6
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # Install essentials
 RUN dnf update -y && \
     dnf install -y \
+    dnf-utils-4.3.0 \
     git-2.50.1 \
     openssh-clients-8.7p1 \
     python3.12 \
@@ -19,6 +21,13 @@ RUN dnf update -y && \
 COPY resources/requirements.txt /requirements.txt
 RUN python3.12 -m pip install --no-cache-dir -r /requirements.txt && \
     rm /requirements.txt
+
+# Add platform-tools-common
+RUN rpm --import http://yum-repository.platform.aws.chdev.org/RPM-GPG-KEY-platform-noarch && \
+    yum-config-manager --add-repo http://yum-repository.platform.aws.chdev.org/platform-noarch.repo && \
+    dnf install -y \
+        "platform-tools-common-${PLATFORM_TOOLS_VERSION}" && \
+    dnf clean all
 
 # Install Packer
 RUN curl -sL "https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_linux_amd64.zip" -o "packer_${PACKER_VERSION}_linux_amd64.zip" && \
