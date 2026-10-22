@@ -1,3 +1,4 @@
+# hadolint global ignore=DL3041
 FROM amazonlinux:2023
 
 ARG PACKER_VERSION=1.10.0
@@ -21,12 +22,12 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN dnf clean metadata && \
     dnf update -y && \
     dnf install -y \
-    bsdtar \
-    git \
-    openssh-clients \
+    bsdtar-3.7.4 \
+    git-2.50.1 \
+    openssh-clients-9.9p1 \
     pip \
-    tar \
-    unzip \
+    tar-1.34 \
+    unzip-6.0 \
     wget && \
     dnf clean all
 
