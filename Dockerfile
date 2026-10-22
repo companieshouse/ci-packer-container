@@ -1,5 +1,7 @@
 FROM centos:7.6.1810
 
+ARG PLATFORM_TOOLS_COMMON_VERSION=1.1.0
+
 # Deny use of the compromised eMudhra intermediate CA certificates.
 # The AL2023 distro is already distrusting the intermediate CA, but
 # still trusts the root cert.  This blacklists the required roots.
@@ -36,6 +38,13 @@ RUN pip install netaddr==0.7.19
 
 # Remove conflicting symlink
 RUN unlink /usr/sbin/packer
+
+# Add platform-tools-common
+RUN rpm --import http://yum-repository.platform.aws.chdev.org/RPM-GPG-KEY-platform-noarch && \
+    yum install -y yum-utils && \
+    yum-config-manager --add-repo http://yum-repository.platform.aws.chdev.org/platform-noarch.repo && \
+    yum install -y "platform-tools-common-" && \
+    yum clean all
 
 # Install Packer
 # TODO: Retrieve this from a reliable source such as an S3 bucket
