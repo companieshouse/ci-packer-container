@@ -1,7 +1,5 @@
 FROM centos:7.6.1810
 
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-
 # Deny use of the compromised eMudhra intermediate CA certificates.
 # The AL2023 distro is already distrusting the intermediate CA, but
 # still trusts the root cert.  This blacklists the required roots.
