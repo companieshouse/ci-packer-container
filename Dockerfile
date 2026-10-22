@@ -2,6 +2,7 @@ FROM centos:8
 
 ARG ANSIBLE_VERSION=2.9.10
 ARG PACKER_VERSION=1.6.0
+ARG PLATFORM_TOOLS_COMMON_VERSION=1.1.0
 
 RUN sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-* && \
     sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*
@@ -25,7 +26,7 @@ RUN pip3 install ansible==${ANSIBLE_VERSION} \
 RUN rpm --import http://yum-repository.platform.aws.chdev.org/RPM-GPG-KEY-platform-noarch && \
     yum install -y yum-utils && \
     yum-config-manager --add-repo http://yum-repository.platform.aws.chdev.org/platform-noarch.repo && \
-    yum install -y platform-tools-common && \
+    yum install -y "platform-tools-common-" && \
     yum clean all
 
 # Install Packer
