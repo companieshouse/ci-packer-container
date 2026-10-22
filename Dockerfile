@@ -1,5 +1,7 @@
 FROM centos:7.6.1810
 
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
 # Deny use of the compromised eMudhra intermediate CA certificates.
 # The AL2023 distro is already distrusting the intermediate CA, but
 # still trusts the root cert.  This blacklists the required roots.
@@ -18,31 +20,38 @@ RUN d=/etc/pki/ca-trust/source/blocklist; [ -d "$d" ] || d=/etc/pki/ca-trust/sou
 RUN sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-* && \
     sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*
 
-RUN yum install -y epel-release \
-                   openssh-clients \
-                   git \
-                   bsdtar \
-                   wget && \
+RUN yum install -y epel-release-7-11 \
+                   openssh-clients-7.4p1-23.el7_9 \
+                   git-1.8.3.1-25.el7_9 \
+                   bsdtar-3.1.2-14.el7_7 \
+                   wget-1.14-18.el7_6.1 && \
                    yum clean all
 
 # Install Ansible and required pip libraries
 COPY resources/get-pip.py /get-pip.py
+# hadolint ignore=DL3059
 RUN python /get-pip.py
-RUN pip install ansible==2.8.1
-RUN pip install boto==2.49.0
-RUN pip install boto3==1.9.201
-RUN pip install dnspython==1.16.0
-RUN pip install netaddr==0.7.19
+# hadolint ignore=DL3059
+RUN pip install --no-cache-dir ansible==2.8.1 \
+    boto==2.49.0 \
+    boto3==1.9.201 \
+    dnspython==1.16.0 \
+    netaddr==0.7.19
 
 # Remove conflicting symlink
+# hadolint ignore=DL3059
 RUN unlink /usr/sbin/packer
 
 # Install Packer
 # TODO: Retrieve this from a reliable source such as an S3 bucket
+# hadolint ignore=DL4006
 RUN wget -qO- https://releases.hashicorp.com/packer/1.4.2/packer_1.4.2_linux_amd64.zip | bsdtar -xvf- -C /usr/bin/
+# hadolint ignore=DL3059
 RUN chown root:root /usr/bin/packer
+# hadolint ignore=DL3059
 RUN chmod 755 /usr/bin/packer
 
 # Create packer user
+# hadolint ignore=DL3059
 RUN useradd -ms /bin/bash packer
 USER packer
