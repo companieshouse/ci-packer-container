@@ -1,4 +1,4 @@
-# hadolint global ignore=DL3041,DL3059
+# hadolint global ignore=DL3041,DL3059,DL3033
 FROM centos:7.6.1810
 
 # Deny use of the compromised eMudhra intermediate CA certificates.
