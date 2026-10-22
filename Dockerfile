@@ -1,3 +1,4 @@
+# hadolint global ignore=DL3041,DL3059
 FROM centos:7.6.1810
 
 # Deny use of the compromised eMudhra intermediate CA certificates.
@@ -25,11 +26,7 @@ RUN yum install -y epel-release \
 # Install Ansible and required pip libraries
 COPY resources/get-pip.py /get-pip.py
 RUN python /get-pip.py
-RUN pip install ansible==2.8.1
-RUN pip install boto==2.49.0
-RUN pip install boto3==1.9.201
-RUN pip install dnspython==1.16.0
-RUN pip install netaddr==0.7.19
+RUN pip --no-cache-dir install ansible==2.8.1 boto==2.49.0 boto3==1.9.201 dnspython==1.16.0 netaddr==0.7.19
 
 # Remove conflicting symlink
 RUN unlink /usr/sbin/packer
