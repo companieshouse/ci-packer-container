@@ -1,6 +1,7 @@
 FROM amazonlinux:2023
 
 ARG PACKER_VERSION=1.10.0
+ARG PLATFORM_TOOLS_COMMON_VERSION=1.1.0
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
@@ -23,7 +24,7 @@ COPY resources/requirements.txt /requirements.txt
 RUN rpm --import http://yum-repository.platform.aws.chdev.org/RPM-GPG-KEY-platform-noarch && \
     yum install -y yum-utils && \
     yum-config-manager --add-repo http://yum-repository.platform.aws.chdev.org/platform-noarch.repo && \
-    yum install -y platform-tools-common && \
+    yum install -y "platform-tools-common-" && \
     yum clean all
 
 # Install Packer
